@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="import">
+
+	<select id="selectCompany" parameterType="com.mega.ITMS.importMng.importprocess.Import_companyDTO" resultType="com.mega.ITMS.importMng.importprocess.Import_companyDTO">
+		SELECT * FROM company
+		WHERE id = #{id}
+	</select>
+	
+		<select id="selectEmployee" parameterType="String" resultType="com.mega.ITMS.importMng.importprocess.Import_employeeDTO">
+		SELECT * FROM employee
+		WHERE id = #{id}
+	</select>
+	
+		<select id="selectCustomer" parameterType="int" resultType="com.mega.ITMS.importMng.importprocess.Import_customerDTO">
+		SELECT * FROM customer
+		WHERE id = #{id}
+	</select>
+	
+		<select id="selectBusiness" parameterType="int" resultType="com.mega.ITMS.importMng.importprocess.Import_businessDTO">
+		SELECT * FROM business
+		WHERE id = #{id}
+	</select>
+	
+		<select id="selectProduct" parameterType="com.mega.ITMS.importMng.importprocess.Import_productDTO" resultType="com.mega.ITMS.importMng.importprocess.Import_productDTO">
+		SELECT * FROM product
+		WHERE id = #{id}
+	</select>
+	
+		<select id="selectOrderDetail" parameterType="int" resultType="com.mega.ITMS.importMng.importprocess.Import_orderDetailDTO">
+		SELECT * FROM order_detail
+		WHERE basic_id = #{basic_id}
+	</select>
+	
+			<select id="selectBasicTradeDESC" resultType="int">
+		SELECT * FROM basic_trade
+		ORDER BY id DESC LIMIT 1
+	</select>
+	
+			<select id="selectBasicTrade" parameterType="int" resultType="com.mega.ITMS.importMng.importprocess.Import_basicTradeDTO">
+		SELECT * FROM basic_trade
+		WHERE id = #{id}
+	</select>
+	
+			<select id="selectOrderShipping" parameterType="int" resultType="com.mega.ITMS.importMng.importprocess.Import_orderShipping">
+		SELECT * FROM order_shipping
+		WHERE basic_id = #{basic_id}
+	</select>
+	
+	<select id="selectProductPID" parameterType="int" resultType="com.mega.ITMS.importMng.importprocess.Import_productDTO">
+		SELECT * FROM product
+		WHERE id = #{p_id}
+	</select>
+	
+	<select id="selectTradeFIleCASE" parameterType="int" resultType="com.mega.ITMS.importMng.importprocess.Import_stepDTO">
+		select basic_id, case type_file 
+		WHEN "1" THEN "step1"  
+		WHEN "2" THEN "step2"  
+		WHEN "3" THEN "step3"  
+		WHEN "4" THEN "step4"
+		END as result
+		FROM trade_file_container
+		WHERE basic_id IN (SELECT id FROM basic_trade WHERE type_tr = 2 AND com_id = #{com_id})
+	</select>
+	
+	
+	
+	
+	
+	
+
+	<resultMap type="com.mega.ITMS.importMng.importprocess.Import_employeeDTO" id="employeeDTO">
+		<result property="id" column="id" />
+		<result property="pw" column="pw" />
+		<result property="com_id" column="com_id" />
+		<result property="dept_id" column="dept_id" />
+		<result property="name" column="name" />
+		<result property="tel" column="tel" />
+		<result property="email" column="email" />
+		<result property="date" column="date" />
+		<result property="delegation" column="delegation" />
+		<result property="flag" column="flag" />
+		<result property="pmenu" column="pmenu" />
+		<result property="imenu" column="imenr" />
+		<result property="emenu" column="emenu" />
+		<result property="fmenu" column="fmenu" />
+		<result property="rmenu" column="rmenu" />
+		<result property="imenu1" column="imenu1" />
+	</resultMap>
+ 
+	<select id="selectAllEmployee" resultMap="employeeDTO">
+		SELECT * FROM employee 
+		WHERE com_id = #{com_id}
+	</select>
+	
+		<resultMap type="com.mega.ITMS.importMng.importprocess.Import_businessDTO" id="businessDTO">
+		<result property="id" column="id" />
+		<result property="com_id" column="com_id" />
+		<result property="type" column="type" />
+		<result property="name" column="name" />
+		<result property="ceo" column="ceo" />
+		<result property="addr" column="addr" />
+		<result property="tel" column="tel" />
+		<result property="country_code" column="country_code" />
+		<result property="date" column="date" />
+	</resultMap>
+ 
+	<select id="selectAllBusiness" resultMap="businessDTO">
+		SELECT * FROM business 
+		WHERE com_id = #{com_id}
+	</select>
+	
+			<resultMap type="com.mega.ITMS.importMng.importprocess.Import_tradeFileDTO" id="tradeFileDTO">
+		<result property="id" column="id" />
+		<result property="basic_id" column="basic_id" />
+		<result property="file_name" column="file_name" />
+		<result property="issued_date" column="issued_date" />
+		<result property="type_file" column="type_file" />
+	</resultMap>
+ 
+	<select id="selectAllTradeFile" resultMap="tradeFileDTO" resultType="int">
+		SELECT * FROM trade_file_container 
+		WHERE basic_id IN (SELECT id FROM basic_trade WHERE type_tr = 2 AND com_id = #{com_id})
+	</select>
+	
+				<resultMap type="com.mega.ITMS.importMng.importprocess.Import_basicTradeDTO" id="basicTradeDTO">
+		<result property="id" column="id" />
+		<result property="com_id" column="com_id" />
+		<result property="user_id" column="user_id" />
+		<result property="b_id" column="b_id" />
+		<result property="c_id" column="c_id" />
+		<result property="type_tr" column="type_tr" />
+		<result property="doc_no" column="doc_no" />
+		<result property="issued_date" column="issued_date" />
+		<result property="required_date" column="required_date" />
+		<result property="closed_date" column="closed_date" />
+		<result property="notes" column="notes" />
+	</resultMap>
+ 
+	<select id="selectAllBasicTrade" resultMap="basicTradeDTO" resultType="int">
+		SELECT * FROM basic_trade 
+		WHERE type_tr = 2 AND com_id = #{com_id}
+	</select>
+	
+		<select id="selectAllBasicTradePK" resultMap="basicTradeDTO" resultType="int">
+		SELECT * FROM basic_trade 
+		WHERE id = #{id}
+	</select>
+	
+	
+	
+	
+	
+		
+		<resultMap type="com.mega.ITMS.importMng.importprocess.Import_customerDTO" id="customerDTO">
+		<result property="id" column="id" />
+		<result property="com_id" column="com_id" />
+		<result property="b_id" column="b_id" />
+		<result property="name" column="name" />
+		<result property="tel" column="tel" />
+		<result property="c_key" column="c_key" />
+		<result property="c_value" column="c_value" />
+		<result property="date" column="date" />
+	</resultMap>
+ 
+	<select id="selectAllCustomer" resultMap="customerDTO">
+		SELECT * FROM customer 
+		WHERE b_id = #{b_id} and com_id = #{com_id}
+	</select>
+	
+	<select id="selectAllCustomerJoin" resultMap="customerDTO">
+		SELECT * FROM customer 
+		WHERE id = #{b_id}
+	</select>
+	
+	
+	<resultMap type="com.mega.ITMS.importMng.importprocess.Import_productDTO" id="productDTO">
+		<result property="id" column="id" />
+		<result property="com_id" column="com_id" />
+		<result property="price" column="price" />
+		<result property="code" column="code" />
+		<result property="name" column="name" />
+		<result property="spec" column="spec" />
+		<result property="date" column="date" />
+	</resultMap>
+	
+		<resultMap type="com.mega.ITMS.importMng.importprocess.Import_stepDTO" id="stepDTO">
+		<result property="trade_id" column="id" />
+		<result property="basic_id" column="basic_id" />
+		<result property="type_file" column="type_file" />
+		<result property="com_id" column="com_id" />
+		<result property="b_id" column="b_id" />
+		<result property="c_id" column="c_id" />
+		<result property="type_tr" column="type_tr" />
+		<result property="file_name" column="file_name" />
+		<result property="user_id" column="user_id" />
+		<result property="doc_no" column="doc_no" />
+		<result property="issued_date" column="issued_date" />
+		<result property="required_date" column="required_date" />
+		<result property="closed_date" column="closed_date" />
+		<result property="notes" column="notes" />
+	</resultMap>
+	
+ 
+	<select id="selectAllProduct" resultMap="productDTO">
+		SELECT * FROM product
+		WHERE com_id = #{com_id}
+	</select>
+	
+		<select id="selectAllProductPID" resultMap="productDTO">
+		SELECT * FROM product
+		WHERE id = #{p_id}
+	</select>
+	
+	
+		<resultMap type="com.mega.ITMS.importMng.importprocess.Import_financeRequestDTO" id="financeRequestDTO">
+		<result property="id" column="id" />
+		<result property="com_id" column="com_id" />
+		<result property="basic_id" column="basic_id" />
+		<result property="cb_id" column="cb_id" />
+		<result property="detail_cb_id" column="detail_cb_id" />
+		<result property="amount_krw" column="amount_krw" />
+		<result property="request_id" column="request_id" />
+		<result property="response_id" column="response_id" />
+		<result property="issued_date" column="issued_date" />
+		<result property="note" column="note" />
+		<result property="receive_date" column="receive_date" />
+	</resultMap>
+	
+			<resultMap type="com.mega.ITMS.importMng.importprocess.Import_orderDetailDTO" id="orderDetailDTO">
+		<result property="id" column="id" />
+		<result property="basic_id" column="basic_id" />
+		<result property="p_id" column="p_id" />
+		<result property="qty" column="qty" />
+	</resultMap>
+	
+ 
+	<select id="selectAllOrderDetail" resultMap="orderDetailDTO">
+		SELECT * FROM order_detail
+		WHERE basic_id IN (SELECT id FROM basic_trade WHERE type_tr = 2 AND basic_id = #{basic_id})
+	</select>
+	
+		<select id="selectAllFinanceRequest" resultMap="financeRequestDTO">
+			select * from finance_request where basic_id in 
+			(SELECT id FROM basic_trade WHERE type_tr = 2 AND com_id = #{com_id}) and not receive_date is null;
+	</select>
+	
+		<select id="selectAllFinanceRequestSearch" resultMap="financeRequestDTO">
+			select * from finance_request where basic_id in 
+			(SELECT id FROM basic_trade WHERE type_tr = 2 AND com_id = #{com_id} and doc_no = #{doc_no}) and not receive_date is null;
+	</select>
+	
+	
+	
+	
+	<insert id="insertBasicTrade" parameterType="com.mega.ITMS.importMng.importprocess.Import_basicTradeDTO">
+		INSERT INTO basic_trade (com_id, user_id, b_id, c_id, type_tr, doc_no, issued_date, notes)
+		VALUES(#{com_id},#{user_id},#{b_id},#{c_id},#{type_tr},#{doc_no},now(), #{notes})
+	</insert>
+	
+		<insert id="insertOrderDetail" parameterType="com.mega.ITMS.importMng.importprocess.Import_orderDetailDTO">
+		INSERT INTO order_detail (id, basic_id, p_id, qty)
+		VALUES(default,#{basic_id},#{p_id},#{qty})
+	</insert>
+	
+			<insert id="insertOrderShipping1" parameterType="com.mega.ITMS.importMng.importprocess.Import_orderShipping">
+		INSERT INTO order_shipping (id, basic_id, cb_id, dcb_id, date)
+		VALUES(default,#{basic_id},#{cb_id},#{dcb_id},now())
+	</insert>
+	
+	<insert id="importInsertFinanceRequest" parameterType="Import_financeRequestDTO">
+		INSERT INTO finance_request (id, com_id, basic_id, request_id, cb_id, detail_cb_id, issued_date, amount_krw, note)
+		VALUES(default,#{com_id},#{basic_id},#{request_id},#{cb_id},#{detail_cb_id},now(),#{amount_krw}, #{note})
+	</insert>
+	
+	
+	
+	<insert id="insertTradeFile" parameterType="com.mega.ITMS.importMng.importprocess.Import_tradeFileDTO">
+		INSERT INTO trade_file_container (id, basic_id, file_name, issued_date, type_file)
+		VALUES(default,#{basic_id},#{file_name},now(), #{type_file})
+	</insert>
+		
+	
+		<update id="POeditUpdate" parameterType="com.mega.ITMS.importMng.importprocess.Import_basicTradeDTO">
+		UPDATE basic_trade
+		SET
+		user_id=#{user_id},
+		c_id=#{c_id},
+		notes=#{notes}
+		WHERE
+		id = #{id}
+	</update>
+	
+	<update id="PIeditUpdate" parameterType="com.mega.ITMS.importMng.importprocess.Import_orderShipping">
+		UPDATE order_shipping
+		SET
+		track_no=#{track_no},
+		o_from=#{o_from},
+		o_to=#{o_to}
+		WHERE
+		id = #{id}
+	</update>
+	
+	<select id="test" resultMap="stepDTO">
+		SELECT * FROM trade_file_container AS tfc
+		, basic_trade AS bt WHERE tfc.basic_id=bt.id and bt.com_id=#{com_id} AND type_file 
+		IN (SELECT max(type_file) FROM trade_file_container WHERE basic_id=tfc.basic_id);
+	</select>
+	
+	<select id="testSearch" resultMap="stepDTO">
+		SELECT * FROM trade_file_container AS tfc
+		, basic_trade AS bt WHERE tfc.basic_id=bt.id and doc_no like CONCAT('%',#{doc_no},'%') and bt.com_id=#{com_id} AND type_file 
+		IN (SELECT max(type_file) FROM trade_file_container WHERE basic_id=tfc.basic_id);
+	</select>
+	
+	
+<!-- 	<update id="PItoCIPL" parameterType="com.mega.ITMS.importMng.importprocess.Import_tradeFileDTO">
+		UPDATE trade_file_container
+		SET
+		type_file=2
+		WHERE
+		id = #{id}
+	</update>
+ -->	
+	
+	
+	<delete id="deleteDetailPID" parameterType="int">
+		DELETE FROM order_detail WHERE
+		id = #{id}
+	</delete>
+
+<!--
+
+	<update id="updateSomething" parameterType="#modelname">
+		UPDATE tablename1
+		SET
+		columnname1=#{param1}
+		WHERE
+		columnname2 = #{param2}
+	</update>
+
+	<delete id="deleteSomething" parameterType="int">
+		DELETE FROM tablename1 WHERE
+		columnname1 = #{param1}
+	</delete>
+ -->
+</mapper>

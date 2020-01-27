@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="customer">
+
+<!-- 거래처 테이블(Business Table) -->
+
+	<select id="selectBn" parameterType="omBnDTO" resultMap="rsMapBn">
+		SELECT *
+		FROM business
+		WHERE com_id = #{com_id} and id = #{id}
+	</select>
+
+	<resultMap type="omBnDTO" id="rsMapBn">
+		<result property="id" column="id" />
+		<result property="com_id" column="com_id" />
+		<result property="type" column="type" />
+		<result property="name" column="name" />
+		<result property="ceo" column="ceo" />
+		<result property="addr" column="addr" />
+		<result property="tel" column="tel" />
+		<result property="country_code" column="country_code" />
+		<result property="date" column="date" />
+	</resultMap>
+
+	<select id="selectAllBn" resultMap="rsMapBn">
+		SELECT * FROM business
+	</select>
+
+	<insert id="insertBn" parameterType="omBnDTO">
+		INSERT INTO business (id, com_id, type, name, ceo, addr, tel, country_code, date)
+		VALUES(#{id}, #{com_id}, #{type}, #{name}, #{ceo}, #{addr}, #{tel}, #{country_code}, now())
+	</insert>
+
+	<update id="updateBn" parameterType="omBnDTO">
+		UPDATE business
+		SET
+		type=#{type}, name=#{name}, ceo=#{ceo}, addr=#{addr}, tel=#{tel}, country_code=#{country_code}
+		WHERE
+		id = #{id} and com_id = #{com_id}
+	</update>
+
+	<delete id="deleteBn" parameterType="omBnDTO">
+		DELETE FROM business
+		WHERE 
+		id = #{id} and com_id = #{com_id}
+	</delete>
+
+<!-- 담당자 테이블(Customer Table) -->
+
+	<select id="selectCs" parameterType="omCsDTO" resultMap="rsMapCs">
+		SELECT *
+		FROM customer
+		WHERE com_id = #{com_id} and id = #{id}
+	</select>
+
+	<resultMap type="omCsDTO" id="rsMapCs">
+		<result property="id" column="id" />
+		<result property="b_id" column="b_id" />
+		<result property="com_id" column="com_id" />
+		<result property="name" column="name" />
+		<result property="tel" column="tel" />
+		<result property="c_key" column="c_key" />
+		<result property="c_value" column="c_value" />
+		<result property="date" column="date" />
+	</resultMap>
+
+	<select id="selectAllCs" resultMap="rsMapCs">
+		SELECT * FROM customer
+	</select>
+
+	<insert id="insertCs" parameterType="omCsDTO">
+		INSERT INTO customer (id, b_id, com_id, name, tel, c_key, c_value, date)
+		VALUES(#{id}, #{b_id}, #{com_id}, #{name}, #{tel}, #{c_key}, #{c_value}, now())
+	</insert>
+
+	<update id="updateCs" parameterType="omCsDTO">
+		UPDATE customer
+		SET
+		name=#{name}, tel=#{tel}, c_key=#{c_key}, c_value=#{c_value}
+		WHERE
+		id = #{id} and com_id = #{com_id}
+	</update>
+
+	<delete id="deleteCs" parameterType="omCsDTO">
+		DELETE FROM customer 
+		WHERE
+		id = #{id} and com_id = #{com_id}
+	</delete>
+
+
+<!-- 거래처 & 담당자 조인 테이블(Customer & Business Join Table) -->	
+
+	<!-- 거래처 관리 목록 -->
+	<select id="selectOneCsJoin" parameterType="omCsJoinDTO" resultMap="rsMapCsJoin">
+		SELECT
+		a.id, a.b_id, a.com_id, a.name, a.tel, a.c_key, a.c_value,
+		b.id as bb_id, b.com_id as b_com_id, b.type, b.name as b_name, b.ceo, b.addr, b.tel as b_tel, b.country_code
+		FROM customer as a left outer join business as b on a.b_id = b.id
+		WHERE a.com_id = #{com_id}
+	</select>
+
+	<resultMap type="omCsJoinDTO" id="rsMapCsJoin">
+		<result property="a_id" column="id" />
+		<result property="a_b_id" column="b_id" />
+		<result property="a_com_id" column="com_id" />
+		<result property="a_name" column="name" />
+		<result property="a_tel" column="tel" />
+		<result property="a_c_key" column="c_key" />
+		<result property="a_c_value" column="c_value" />
+		
+		<result property="b_id" column="bb_id" />
+		<result property="b_com_id" column="b_com_id" />
+		<result property="b_type" column="type" />
+		<result property="b_name" column="b_name" />
+		<result property="b_ceo" column="ceo" />
+		<result property="b_addr" column="addr" />
+		<result property="b_tel" column="b_tel" />
+		<result property="b_country_code" column="country_code" />
+	</resultMap>
+
+	<select id="selectAllCsJoin" resultMap="rsMapCsJoin"> <!-- 거래처 관리 페이지 -->
+		SELECT
+		a.id, a.b_id, a.com_id, a.name, a.tel, a.c_key, a.c_value,
+		b.id as bb_id, b.com_id as b_com_id, b.type, b.name as b_name, b.ceo, b.addr, b.tel as b_tel, b.country_code
+		FROM customer as a left outer join business as b on a.b_id = b.id
+		WHERE a.com_id = #{com_id}
+	</select>
+	<!-- 입력값으로 com_id로 넘겨줬기 때문에 com_id  -->
+	
+	<select id="selectAllSearchBnCsZero" resultMap="rsMapCsJoin"> <!-- 거래처 관리 페이지 검색 : 담당자명 일 때 -->
+		SELECT
+		a.id, a.b_id, a.com_id, a.name, a.tel, a.c_key, a.c_value,
+		b.id as bb_id, b.com_id as b_com_id, b.type, b.name as b_name, b.ceo, b.addr, b.tel as b_tel, b.country_code
+		FROM customer as a left outer join business as b on a.b_id = b.id
+		WHERE a.com_id = #{a_com_id} and a.name like concat('%',#{a_name},'%')
+	</select>
+		<!-- 입력값으로 omCsJoinDTO에 담아서 넘겨줬기 때문에 omCsJoinDTO에 선언한 a_com_id로  -->
+	
+	<select id="selectAllSearchBnCsOne" resultMap="rsMapCsJoin"> <!-- 거래처 관리 페이지 검색 : 거래처명 일 때 -->
+		SELECT
+		a.id, a.b_id, a.com_id, a.name, a.tel, a.c_key, a.c_value,
+		b.id as bb_id, b.com_id as b_com_id, b.type, b.name as b_name, b.ceo, b.addr, b.tel as b_tel, b.country_code
+		FROM customer as a left outer join business as b on a.b_id = b.id
+		WHERE a.com_id = #{a_com_id} and b.name like concat('%',#{b_name},'%')
+	</select>
+	<!-- 입력값으로 omCsJoinDTO에 담아서 넘겨줬기 때문에 omCsJoinDTO에 선언한 a_com_id로  -->
+
+</mapper>

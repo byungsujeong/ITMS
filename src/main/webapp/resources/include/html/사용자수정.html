@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="import" href=include/import.html>
+    <script type="text/javascript">
+        var checkValue = 0;
+        $(document).ready(function () {
+            $("#nav_html").load("nav.html")
+
+            $(".aligned").click(function () {
+                idValue = $(this).attr('id');
+                if (checkValue == 0) {
+                    $("#" + idValue + ">i").attr("class", "large green checkmark icon");
+                    checkValue = 1;
+                } else {
+                    $("#" + idValue + ">i").attr("class", "large gray close icon");
+                    checkValue = 0;
+                }
+            }); // click func
+            $('.ui.dropdown')
+                .dropdown()
+            ;
+        });
+
+
+    </script>
+    <link rel="import" href=nav.html>
+
+</head>
+<body>
+<div id="nav_html"></div> <!--상단,좌측메뉴-->
+<table class="ui celled structured table">
+    <thead>
+    <tr>
+        <th colspan="11">사용자 정보/권한 수정</th>
+    </tr>
+    <tr>
+        <th rowspan="2">ID</th>
+        <th rowspan="2">성명</th>
+        <th rowspan="2">직급</th>
+        <th rowspan="2">부서</th>
+        <th colspan="4">권한범위</th>
+        <th rowspan="2">설정</th>
+    </tr>
+    <tr>
+        <th>기본메뉴</th>
+        <th>수출입관리</th>
+        <th>재무회계</th>
+        <th>종합보고</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>test1</td>
+        <td>신입이</td>
+        <td>
+            <div class="ui selection dropdown">
+                <input type="hidden" name="gender">
+                <i class="dropdown icon"></i>
+                <div class="default text">사원</div>
+                <div class="menu">
+                    <div class="item" data-value="0">사원</div>
+                    <div class="item" data-value="1">대리</div>
+                    <div class="item" data-value="2">과장</div>
+                    <div class="item" data-value="3">차장</div>
+                    <div class="item" data-value="4">부장</div>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="ui selection dropdown">
+                <input type="hidden" name="gender">
+                <i class="dropdown icon"></i>
+                <div class="default text">무역부</div>
+                <div class="menu">
+                    <div class="item" data-value="0">무역부</div>
+                    <div class="item" data-value="1">재무부</div>
+                    <div class="item" data-value="2">영업부</div>
+                </div>
+            </div>
+        </td>
+        <td class="center aligned" id="checkmark1">
+            <i class="large gray close icon"></i></td>
+        <td class="center aligned" id="checkmark2">
+            <i class="large green checkmark icon"></i></td>
+        <td class="center aligned" id="checkmark3">
+            <i class="large green checkmark icon"></i></td>
+        <td class="center aligned" id="checkmark4">
+            <i class="large green checkmark icon"></i></td>
+        <td>
+            <div class="ui button">수정완료</div>
+        </td>
+    </tr>
+    </tbody>
+    <tfoot class="full-width">
+    <tr>
+        <th colspan="12">
+        </th>
+    </tr>
+    </tfoot>
+</table>
+</body>
+</html>

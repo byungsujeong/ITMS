@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="request">
+
+	<select id="selectrid" parameterType="int" resultMap="pay">
+		select f.*, b.doc_no from finance_request as f left join basic_trade as b on f.basic_id = b.id where f.id=#{id}
+	</select>
+
+	<resultMap type="requestDTO" id="rs">
+		<result property="id" column="id" />
+		<result property="com_id" column="com_id" />
+		<result property="basic_id" column="basic_id" />
+		<result property="request_id" column="request_id" />
+		<result property="response_id" column="response_id" />
+		<result property="detail_cb_id" column="detail_cb_id" />
+		<result property="issued_date" column="issued_date" />
+		<result property="amount_usd" column="amount_usd" />
+		<result property="amount_krw" column="amount_krw" />
+		<result property="note" column="note" />
+		<result property="receive_date" column="receive_date" />
+	</resultMap>
+	
+	<resultMap type="transferDTO" id="transfer_rs">
+		<result property="id" column="id" />
+		<result property="finance_id" column="finance_id" />
+		<result property="action_type" column="action_type" />
+		<result property="item" column="item" />
+		<result property="amount_usd" column="amount_usd" />
+		<result property="amount_krw" column="amount_krw" />
+		<result property="amount_hdc" column="amount_hdc" />
+		<result property="closed_date" column="closed_date" />
+		<result property="note" column="note" />
+	</resultMap>
+	
+	<resultMap type="payDTO" id="pay">
+		<result property="id" column="id" />
+		<result property="com_id" column="com_id" />
+		<result property="basic_id" column="basic_id" />
+		<result property="request_id" column="request_id" />
+		<result property="response_id" column="response_id" />
+		<result property="cb_id" column="cb_id" />
+		<result property="detail_cb_id" column="detail_cb_id" />
+		<result property="issued_date" column="issued_date" />
+		<result property="amount_usd" column="amount_usd" />
+		<result property="amount_krw" column="amount_krw" />
+		<result property="note" column="note" />
+		<result property="receive_date" column="receive_date" />
+		<result property="doc_no" column="doc_no" />
+		<result property="name" column="name" />
+		<result property="c_key" column="c_key" />
+		<result property="c_value" column="c_value" />
+	</resultMap>
+	
+	   <resultMap type="incomeDTO" id="income"> <!-- 지수 -->
+      <result property="bs_id" column="id" />
+      <result property="com_id" column="com_id" />
+      <result property="basic_id" column="basic_id" />
+      <result property="request_id" column="request_id" />
+      <result property="response_id" column="response_id" />
+      <result property="cb_id" column="cb_id" />
+      <result property="detail_cb_id" column="detail_cb_id" />
+      <result property="fq_issued_date" column="issued_date" />
+      <result property="amount_usd" column="amount_usd" />
+      <result property="amount_krw" column="amount_krw" />
+      <result property="note" column="note" />
+      <result property="receive_date" column="receive_date" />
+      <result property="fq_id" column="id" />
+      <result property="user_id" column="user_id" />
+      <result property="b_id" column="b_id" />
+      <result property="c_id" column="c_id" />
+      <result property="type_tr" column="type_tr" />
+      <result property="doc_no" column="doc_no" />
+      <result property="basic_issued_date" column="issued_date" />
+      <result property="required_date" column="required_date" />
+      <result property="closed_date" column="closed_date" />
+      <result property="notes" column="notes" />
+      <result property="name" column="name" />
+      <result property="acc" column="acc" />
+      <result property="bank" column="bank" />
+   </resultMap>
+
+   <select id="selectIncomeJoin" resultMap="income"> <!-- 지수 -->
+      select * from finance_request as fr, basic_trade as bt, customer as c,account as a where fr.basic_id=bt.id  
+      and fr.note = "income"
+      and bt.com_id in (select com_id from basic_trade where com_id=#{com_id})
+      and c.id=fr.detail_cb_id;
+      
+   </select>
+
+
+
+   <select id="transfer_selectAllJISOO" resultMap="transfer_rs"> <!-- 지수 -->
+      select * from finance_transfer where finance_id in (select id from finance_request where com_id=#{com_id})   </select>
+
+	<select id="selectAll" resultMap="pay">
+		select f.*, b.doc_no, com.name, c.c_key, c.c_value from finance_request as f left join basic_trade as b on f.basic_id = b.id
+								 					 		 left join company as com on f.com_id = com.id
+														     left join customer as c on f.detail_cb_id = c.id ;
+	</select>
+	
+	<select id="transfer_selectAll" resultMap="transfer_rs">
+		SELECT * FROM finance_transfer
+	</select>
+
+	<update id="pay_check" parameterType="requestDTO">
+		UPDATE finance_request SET receive_date = now(), response_id = #{response_id}
+		WHERE id=#{id}
+	</update>
+	
+	<update id="pay_update" parameterType="requestDTO">
+		UPDATE finance_request SET amount_krw = #{amount_krw}, note = #{note}
+		WHERE id=#{id}
+	</update>
+
+<!-- 	<update id="updaterid" parameterType="requestDTO"> -->
+<!-- 		UPDATE finance_request -->
+<!-- 		SET -->
+<!-- 		amount_krw=#{amount_krw}, -->
+<!-- 		note=#{note} -->
+<!-- 		WHERE -->
+<!-- 		id = #{id} -->
+<!-- 	</update> -->
+
+	<delete id="delete" parameterType="requestDTO">
+		DELETE FROM finance_request WHERE
+		id = #{id}
+	</delete>
+
+</mapper>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="import" href=include/import.html>
+<link rel="import" href=nav.html>
+<meta charset="UTF-8">
+<title>Title</title>
+<script type="text/javascript">
+	window.print();
+</script>
+<style>
+body {
+	background: rgb(204, 204, 204);
+}
+
+page {
+	background: white;
+	display: block;
+	margin: 0 auto;
+	margin-bottom: 0.5cm;
+	box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+}
+
+page[size="A4"] {
+	width: 21cm;
+	height: 29.7cm;
+}
+
+@media print {
+	body, page {
+		margin: 0;
+		box-shadow: 0;
+	}
+}
+</style>
+</head>
+<body>
+	<page size="A4">
+	<div class="ui form segment">
+		<div class="field">
+			<h1 hidden=""></h1>
+			<h1>견적서</h1>
+			<table class="ui definition table">
+				<tbody>
+					<tr>
+						<td colspan="2">판매자</td>
+					</tr>
+					<tr>
+						<td>회사명</td>
+						<td>어벤저스주식회사</td>
+					</tr>
+					<tr>
+						<td>회사주소</td>
+						<td>Soeul, Korea</td>
+					</tr>
+					<tr>
+						<td>Tel</td>
+						<td>+82-2-700-0000</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+
+		<div class="field">
+			<table class="ui definition table">
+				<tbody>
+					<tr>
+						<td colspan="2">구매자</td>
+					</tr>
+
+					<tr>
+						<td>회사명</td>
+						<td>거래처</td>
+					</tr>
+				</tfoot>
+				<tr>
+					<td>회사주소</td>
+					<td>빈칸(회사명 검색으로 자동입력)</td>
+				</tr>
+				<tr>
+					<td>Tel</td>
+					<td>빈칸(회사명 검색으로 자동입력)</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+		<br>
+		<div class="field">
+			<label>주문상세내역</label>
+			<table class="ui celled table" id="goodsTable">
+				<thead>
+					<tr>
+						<th colspan="6">Description of Goods</th>
+					</tr>
+					<tr>
+						<th>제품코드</th>
+						<th>제품명</th>
+						<th>상세규격</th>
+						<th>단가</th>
+						<th>수량</th>
+						<th>소계</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>제품</td>
+						<td>어떤이름</td>
+						<td>어떤규격</td>
+						<td>어떤단가</td>
+						<td>수량</td>
+						<td>수식넣기</td>
+					</tr>
+					<tr>
+						<td>제품</td>
+						<td>어떤이름</td>
+						<td>어떤규격</td>
+						<td>어떤단가</td>
+						<td>수량</td>
+						<td>수식넣기</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="field">
+				<table class="ui definition table">
+					<tbody>
+						<tr>
+							<td colspan="4">합계</td>
+							<td colspan="1">총수량: 수량수식</td>
+							<td colspan="1">총금액: 금액수식</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+	</div>
+
+
+	</page>
+</body>
+</html>

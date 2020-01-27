@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="deptMng">
+
+	<select id="selectDept" parameterType="deptMng" resultMap="rs">
+		SELECT * FROM dept WHERE com_id = #{com_id}
+	</select>
+
+	<select id="searchName" resultMap="rs">
+		SELECT * FROM dept where com_id=#{com_id} and name like concat('%',#{name},'%')
+	</select>
+
+	<select id="searchId" resultMap="rs">
+		SELECT * FROM dept where com_id=#{com_id} and id like concat('%',#{id},'%')
+	</select>
+
+	<resultMap type="deptMng" id="rs">
+		<result property="id" column="id" />
+		<result property="com_id" column="com_id" />
+		<result property="name" column="name" />
+		<result property="r_date" column="r_date" />
+	</resultMap>
+
+	<select id="getAll" resultMap="rs">
+		SELECT * FROM tablename1
+	</select>
+
+	<insert id="insert" parameterType="deptMng">
+		INSERT INTO dept (id, com_id, name, r_date) VALUES(#{id},#{com_id},#{name},now())
+	</insert>
+
+	<update id="update" parameterType="deptMng">
+		UPDATE dept	SET	name=#{name} WHERE id = #{id} and com_id = #{com_id}
+	</update>
+
+	<delete id="delete" parameterType="deptMng">
+		DELETE FROM dept WHERE id = #{id} and com_id = #{com_id}
+	</delete>
+
+</mapper>

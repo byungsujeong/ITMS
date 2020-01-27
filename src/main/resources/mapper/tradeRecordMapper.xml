@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="tradeRecord">
+    <resultMap type="com.mega.ITMS.report.tradeRecord.TradeRecordDto" id="tradeRecordDto">
+        <result property="customer" column="b_id"/>
+        <result property="issued_date" column="issued_date"/>
+        <result property="po_num" column="doc_no"/>
+        <result property="p_name" column="name"/>
+        <result property="p_spec" column="spec"/>
+        <result property="qty" column="qty"/>
+        <result property="unit_price" column="price"/>
+        <result property="total" column="total"/>
+        <result property="close_date" column="closed_date"/>
+        <result property="notes" column="notes"/>
+    </resultMap>
+    <select id="import" resultMap="tradeRecordDto">
+        select basic_trade.*, order_detail.*, product.*
+        from basic_trade
+        inner join order_detail on basic_trade.id=order_detail.basic_id
+        inner join product on order_detail.p_id=product.id where type_tr=2
+    </select>
+    <select id="export" resultMap="tradeRecordDto">
+        select basic_trade.*, order_detail.*, product.*
+        from basic_trade
+        inner join order_detail on basic_trade.id=order_detail.basic_id
+        inner join product on order_detail.p_id=product.id where type_tr=1
+    </select>
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="monthly">
+    <resultMap type="com.mega.ITMS.report.monthly.SumMonthlyDto" id="sumMonthlyDto">
+        <result property="payment" column="payment"/>
+        <result property="customs" column="customs"/>
+        <result property="logistical_cost" column="logistical_cost"/>
+        <result property="domestic_logistical_cost" column="domestic_logistical_cost"/>
+        <result property="others" column="others"/>
+        <result property="import_total" column="import_total"/>
+        <result property="manage_total" column="manage_total"/>
+    </resultMap>
+    <select id="list_finance_transfer" resultType="java.lang.Integer" resultMap="sumMonthlyDto">
+			SELECT
+            round(sum(case when item=1 then amount_krw end)/1000) as payment,
+            round(sum(case when item=2 then amount_krw end)/1000) as customs,
+            round(sum(case when item=3 then amount_krw end)/1000) as logistical_cost,
+            round(sum(case when item=4 then amount_krw end)/1000) as domestic_logistical_cost,
+            round(sum(case when item=5 then amount_hdc end)/1000) as others,
+            round(sum(case when 4 > item then amount_krw end)/1000) as import_total,
+            round(sum(case when item > 3 then amount_krw end)/1000) as manage_total
+ 		    FROM finance_transfer
+ 		    GROUP BY MONTH(closed_date)
+	</select>
+</mapper>

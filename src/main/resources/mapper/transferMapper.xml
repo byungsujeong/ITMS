@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="transfer">
+
+	<select id="selectpayend" parameterType="transferDTO"
+		resultMap="rs">
+		SELECT * FROM finance_transfer
+		WHERE finance_id =
+		#{finance_id}
+	</select>
+	
+	<select id="selectfid" parameterType="transferDTO"
+		resultMap="rs">
+		SELECT * FROM finance_transfer
+		WHERE id =
+		#{id}
+	</select>
+
+	<resultMap type="transferDTO" id="rs">
+		<result property="id" column="id" />
+		<result property="finance_id" column="finance_id" />
+		<result property="action_type" column="action_type" />
+		<result property="item" column="item" />
+		<result property="amount_usd" column="amount_usd" />
+		<result property="amount_krw" column="amount_krw" />
+		<result property="amount_hdc" column="amount_hdc" />
+		<result property="closed_date" column="closed_date" />
+		<result property="note" column="note" />
+	</resultMap>
+	
+		<resultMap type="requestDTO" id="request_rs">
+		<result property="id" column="id" />
+		<result property="com_id" column="com_id" />
+		<result property="basic_id" column="basic_id" />
+		<result property="request_id" column="request_id" />
+		<result property="response_id" column="response_id" />
+		<result property="cb_id" column="cb_id" />
+		<result property="detail_cb_id" column="detail_cb_id" />
+		<result property="issued_date" column="issued_date" />
+		<result property="amount_usd" column="amount_usd" />
+		<result property="amount_krw" column="amount_krw" />
+		<result property="note" column="note" />
+		<result property="receive_date" column="receive_date" />
+	</resultMap>
+
+	<select id="selectAll" resultMap="rs">
+		SELECT * FROM finance_transfer
+	</select>
+
+	<select id="selectRequest" resultMap="request_rs">
+		SELECT * FROM finance_request WHERE com_id = #{com_id}
+	</select>
+
+	<insert id="payinsert" parameterType="transferDTO">
+		INSERT INTO
+		finance_transfer (id, finance_id, closed_date)
+		VALUES(null,
+		#{finance_id}, now())
+	</insert>
+
+	<insert id="insertAll" parameterType="transferDTO">
+		INSERT INTO
+		finance_transfer
+		VALUES(null, #{finance_id}, #{action_type}, #{item},
+		null, #{amount_krw}, #{amount_hdc}, now(), #{note})
+	</insert>
+
+	<update id="update" parameterType="transferDTO">
+		UPDATE finance_transfer
+		SET
+		action_type = #{action_type},
+		item = #{item},
+		amount_krw = #{amount_krw},
+		amount_hdc = #{amount_hdc},
+		closed_date = #{closed_date},
+		note = #{note}
+		WHERE
+		id = #{id}
+	</update>
+
+	<delete id="delete" parameterType="transferDTO">
+		DELETE FROM
+		finance_transfer WHERE
+		id = #{id}
+	</delete>
+
+</mapper>

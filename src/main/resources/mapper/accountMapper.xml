@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="accMng">
+
+	<select id="selectAccount" parameterType="accMng" resultMap="rs">
+		SELECT * FROM account WHERE com_id = #{com_id}
+	</select>
+	
+	<select id="searchName" resultMap="rs">
+		SELECT * FROM account where com_id=#{com_id} and name like concat('%',#{name},'%')
+	</select>
+	
+	<select id="searchBank" resultMap="rs">
+		SELECT * FROM account where com_id=#{com_id} and bank like concat('%',#{bank},'%')
+	</select>
+	
+	<select id="searchAcc" resultMap="rs">
+		SELECT * FROM account where com_id=#{com_id} and acc like concat('%',#{acc},'%')
+	</select>
+	
+	<resultMap type="accMng" id="rs">
+		<result property="id" column="id" />
+		<result property="com_id" column="com_id" />
+		<result property="name" column="name" />
+		<result property="bank" column="bank" />
+		<result property="acc" column="acc" />
+		<result property="r_date" column="r_date" />
+	</resultMap>
+
+	<select id="getAll" resultMap="rs">
+		SELECT * FROM tablename1
+	</select>
+
+	<insert id="insert" parameterType="accMng">
+		INSERT INTO account (com_id, name, bank, acc, r_date) VALUES(#{com_id},#{name},#{bank},#{acc},now())
+	</insert>
+
+	<update id="update" parameterType="accMng">
+		UPDATE account	SET	name=#{name} WHERE id = #{id} and com_id = #{com_id}
+	</update>
+
+	<delete id="delete" parameterType="accMng">
+		DELETE FROM account WHERE id = #{id} and com_id = #{com_id}
+	</delete>
+
+</mapper>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="product">
+
+	<select id="selectPd" parameterType="omPdDTO" resultMap="rsMapPd">
+		SELECT *
+		FROM product
+		WHERE com_id = #{com_id} and id = #{id}
+	</select>
+
+	<resultMap type="omPdDTO" id="rsMapPd">
+		<result property="id" column="id" />
+		<result property="com_id" column="com_id" />
+		<result property="code" column="code" />
+		<result property="name" column="name" />
+		<result property="spec" column="spec" />
+		<result property="price" column="price" />
+		<result property="date" column="date" />
+	</resultMap>
+
+	<select id="selectAllPd" resultMap="rsMapPd">
+		SELECT * FROM product a WHERE date=(select max(date) from product WHERE code = a.code and com_id = #{com_id})
+	</select>
+		<!-- 왜 a.code인지 ?? -->
+		<!-- 서브쿼리문 : where조건으로 date가 제일 최신인 것만 으로 검색하여 제품 정보 전체 목록 출력 / 내림차순의 효과 -->
+	
+	<select id="selectAllPdSearchZero" resultMap="rsMapPd">
+		SELECT * FROM product a WHERE date=(select max(date) from product WHERE code = a.code and com_id = #{com_id}) and name like concat('%',#{name},'%')
+	</select>
+		<!-- controller에서 받아온 입력값 search의 실제값을 omPdDTO.setName(search) 해줬으므로 #{name}으로  -->
+	
+	<select id="selectAllPdSearchOne" resultMap="rsMapPd">
+		SELECT * FROM product a WHERE date=(select max(date) from product WHERE code = a.code and com_id = #{com_id}) and code like concat('%',#{code},'%')
+	</select>
+		<!-- controller에서 받아온 입력값 search의 실제값을 omPdDTO.setCode(search) 해줬으므로 #{code}로  -->
+	
+	<select id="selectAllHistoryDown" resultMap="rsMapPd">
+		SELECT * FROM product WHERE com_id = #{com_id} and code = #{code} order by date desc
+	</select>
+
+	<select id="selectAllHistoryUp" resultMap="rsMapPd">
+		SELECT * FROM product WHERE com_id = #{com_id} and code = #{code} order by date asc
+	</select>
+
+	<insert id="insertPd" parameterType="omPdDTO">
+		INSERT INTO product (id, com_id, code, name, spec, price, date)
+		VALUES(#{id}, #{com_id}, #{code}, #{name}, #{spec}, #{price}, now())
+	</insert>
+	
+	<insert id="insertPd2" parameterType="omPdDTO"> <!-- 제품 정보 수정 시 : 단가 이력 관리를 위해 insert가 필요 -->
+		INSERT INTO product (com_id, code, name, spec, price, date)
+		VALUES(#{com_id}, #{code}, #{name}, #{spec}, #{price}, now())
+	</insert>
+
+	<update id="updatePd" parameterType="omPdDTO">
+		UPDATE product
+		SET
+		code=#{code}, name=#{name}, spec=#{spec}, price=#{price}
+		WHERE
+		id = #{id} and com_id = #{com_id}
+	</update>
+
+	<delete id="deletePd" parameterType="omPdDTO">
+		DELETE 
+		FROM product
+		WHERE
+		code = #{code} and com_id = #{com_id} <!-- 해당 제품의 단가이력까지 한번에 삭제하기 위해 id가 아닌 code로 삭제 -->
+	</delete>
+
+</mapper>

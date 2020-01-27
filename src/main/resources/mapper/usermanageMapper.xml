@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="employeeMng">
+
+	<select id="selectDept" parameterType="employeeMng" resultMap="rsDept">
+		SELECT * FROM dept WHERE com_id = #{com_id}
+	</select>
+	
+	<resultMap type="employeeMng" id="rsDept">
+		<result property="id" column="id" />
+		<result property="com_id" column="com_id" />
+		<result property="name" column="name" />
+		<result property="r_date" column="r_date" />
+	</resultMap>
+
+	<select id="select" parameterType="employeeMng" resultMap="rs">
+		SELECT * FROM employee where id=#{id} and pw=#{pw} and com_id=#{com_id} and flag=1
+	</select>
+	
+	<select id="getUser" parameterType="employeeMng" resultMap="rs">
+		SELECT * FROM employee where id=#{id} and com_id=#{com_id} and flag=1
+	</select>
+
+	<resultMap type="employeeMng" id="rs">
+		<result property="id" column="id" />
+		<result property="pw" column="pw" />
+		<result property="com_id" column="com_id" />
+		<result property="dept_id" column="dept_id" />
+		<result property="name" column="name" />
+		<result property="tel" column="tel" />
+		<result property="email" column="email" />
+		<result property="r_date" column="r_date" />
+		<result property="pmenu" column="pmenu" />
+		<result property="imenu" column="imenu" />
+		<result property="emenu" column="emenu" />
+		<result property="fmenu" column="fmenu" />
+		<result property="rmenu" column="rmenu" />
+		<result property="delegation" column="delegation" />
+		<result property="flag" column="flag" />
+	</resultMap>
+
+	<select id="selectAll" resultMap="rs">
+		SELECT * FROM employee where com_id=#{com_id} and flag=1
+	</select>
+	
+	<select id="searchName" resultMap="rs">
+		SELECT * FROM employee where com_id=#{com_id} and flag=1 and name like concat('%',#{name},'%')
+	</select>
+	
+	<select id="searchId" resultMap="rs">
+		SELECT * FROM employee where com_id=#{com_id} and flag=1 and id like concat('%',#{id},'%')
+	</select>
+	
+	<select id="searchDept_id" resultMap="rs">
+		SELECT * FROM employee where com_id=#{com_id} and flag=1 and dept_id like concat('%',#{dept_id},'%')
+	</select>
+	
+	<select id="searchDept_name" resultMap="rs">
+		SELECT * FROM employee where com_id=#{com_id} and flag=1 and dept_id in (select id from dept where com_id=#{com_id} and name like concat('%',#{name},'%'))
+	</select>
+
+	<insert id="insert" parameterType="employeeMng">
+		INSERT INTO employee (id,pw,com_id,dept_id,name,tel,email,r_date,pmenu,imenu,emenu,fmenu,rmenu,delegation,flag)
+		VALUES(#{id},#{pw},#{com_id},#{dept_id},#{name},#{tel},#{email},now(),1,1,1,1,1,#{id},1)
+	</insert>
+
+	<update id="update" parameterType="employeeMng">
+		UPDATE employee SET name=#{name}, dept_id=#{dept_id}, tel=#{tel}, email=#{email}, pmenu=#{pmenu}, imenu=#{imenu}, emenu=#{emenu}, fmenu=#{fmenu}, rmenu=#{rmenu}
+		WHERE id = #{id} and com_id=#{com_id}
+	</update>
+	
+	<update id="flag" parameterType="employeeMng">
+		UPDATE employee SET flag=0 WHERE id = #{id} and com_id=#{com_id}
+	</update>
+
+	<delete id="delete" parameterType="employeeMng">
+		DELETE FROM tablename1 WHERE
+		columnname1 = #{param1}
+	</delete>
+	
+	<update id="updatePw" parameterType="employeeMng">
+		UPDATE employee SET pw=#{pw}, delegation=#{delegation} WHERE id = #{id} and com_id=#{com_id}
+	</update>
+	
+	<select id="delegation" resultMap="rs">
+		SELECT * FROM employee where com_id=#{com_id} and dept_id=#{dept_id} and flag=1
+	</select>
+
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+	<!-- mapper파일만들 때마다 alias지정 -->
+	<!-- mapper파일에서 쓸 타입을 패키지.클래스으로 써주어야 하는데, 너무 길어서 alias를 지정함. -->
+		<typeAlias type="com.mega.ITMS.operationMng.customer.OperationMngBusinessDTO" alias="omBnDTO"></typeAlias>
+		<typeAlias type="com.mega.ITMS.operationMng.customer.OperationMngCustomerDTO" alias="omCsDTO"></typeAlias>
+		<typeAlias type="com.mega.ITMS.operationMng.product.OperationMngProductDTO" alias="omPdDTO"></typeAlias>
+		<typeAlias type="com.mega.ITMS.operationMng.customer.OperationMngCustomerJoinDTO" alias="omCsJoinDTO"></typeAlias>
+		<typeAlias type="com.mega.ITMS.userMng.corporate.UserMngCorpDTO" alias="corpMng"></typeAlias>
+		<typeAlias type="com.mega.ITMS.userMng.division.UserMngDeptDTO" alias="deptMng"></typeAlias>
+		<typeAlias type="com.mega.ITMS.userMng.usermanage.UserMngEmployeeDTO" alias="employeeMng"></typeAlias>
+		<typeAlias type="com.mega.ITMS.userMng.account.UserMngAccountDTO" alias="accMng"></typeAlias>
+		<typeAlias type="com.mega.ITMS.financialMng.request.RequestDTO" alias="requestDTO"/>
+		<typeAlias type="com.mega.ITMS.financialMng.transfer.TransferDTO" alias="transferDTO"/>
+		<typeAlias type="com.mega.ITMS.financialMng.request.payDTO" alias="payDTO"/>
+		<typeAlias type="com.mega.ITMS.financialMng.request.IncomeDTO" alias="incomeDTO"/>
+		<typeAlias type="com.mega.ITMS.importMng.importprocess.Import_basicTradeDTO" alias="Import_basicTradeDTO"/>
+		<typeAlias type="com.mega.ITMS.importMng.importprocess.Import_businessDTO" alias="Import_businessDTO"/>
+		<typeAlias type="com.mega.ITMS.importMng.importprocess.Import_companyDTO" alias="Import_companyDTO"/>
+		<typeAlias type="com.mega.ITMS.importMng.importprocess.Import_customerDTO" alias="Import_customerDTO"/>
+		<typeAlias type="com.mega.ITMS.importMng.importprocess.Import_employeeDTO" alias="Import_employeeDTO"/>
+		<typeAlias type="com.mega.ITMS.importMng.importprocess.Import_orderDetailDTO" alias="Import_orderDetailDTO"/>
+		<typeAlias type="com.mega.ITMS.importMng.importprocess.Import_orderShipping" alias="Import_orderShipping"/>
+		<typeAlias type="com.mega.ITMS.importMng.importprocess.Import_productDTO" alias="Import_productDTO"/>
+		<typeAlias type="com.mega.ITMS.importMng.importprocess.Import_tradeFileDTO" alias="Import_tradeFileDTO"/>
+		<typeAlias type="com.mega.ITMS.importMng.importprocess.Import_financeRequestDTO" alias="Import_financeRequestDTO"/>
+	</typeAliases>
+	
+	<!-- 사용할MAPPER목록 설정 -->
+	<mappers>
+		<mapper resource="mapper/customerMapper.xml" />
+ 		<mapper resource="mapper/productMapper.xml" />
+		<mapper resource="mapper/corporateMapper.xml" />
+		<mapper resource="mapper/divisionMapper.xml" />
+		<mapper resource="mapper/usermanageMapper.xml" />
+		<mapper resource="mapper/accountMapper.xml" />
+		<mapper resource="mapper/importprocessMapper.xml" />
+		<mapper resource="mapper/monthlyMapper.xml" />
+		<mapper resource="mapper/myReportMapper.xml" />
+		<mapper resource="mapper/tradeRecordMapper.xml" />
+		<mapper resource="mapper/requestMapper.xml" />
+		<mapper resource="mapper/transferMapper.xml" />
+	</mappers>
+</configuration>
